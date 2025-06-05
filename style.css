@@ -4,11 +4,13 @@ body {
   font-family: 'Roboto', 'Arial', 'Segoe UI', sans-serif;
   font-size: 16px;
   margin: 0 auto;
+  background: #f5f5f5;
 }
 
 h2, h3, h4 {
   text-align: center;
   font-size: 18px;
+  color: #333;
 }
 
 h4 {
@@ -18,6 +20,7 @@ h4 {
 
 p {
   margin: 5px 0;
+  color: #333;
 }
 
 .author {
@@ -37,6 +40,7 @@ ul {
 li {
   margin: 5px 0;
   font-size: 14px;
+  color: #333;
 }
 
 #coin-selector {
@@ -46,4 +50,58 @@ li {
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background: #fff;
+}
+
+#candlestick-chart {
+  width: 100%;
+  height: 200px;
+  transition: all 0.3s ease;
+}
+
+.price-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#current-price {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#price-change {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.price-up {
+  color: #28a745;
+}
+
+.price-down {
+  color: #dc3545;
+}
+
+.prediction-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 640px) {
+  body {
+    width: 600px;
+  }
+  #candlestick-chart {
+    height: 300px;
+  }
+  #current-price {
+    font-size: 18px;
+  }
+  #price-change {
+    font-size: 16px;
+  }
 }
