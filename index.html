@@ -13,14 +13,33 @@
   <div class="max-w-sm sm:max-w-2xl mx-auto p-4 sm:p-6">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl sm:text-2xl font-semibold text-blue-400">Dự đoán giá tiền điện tử</h2>
-      <div>
-        <button id="auth-button" onclick="showAuthModal(false)" class="text-sm text-blue-400 hover:underline">Đăng nhập</button>
-        <button id="logout-button" onclick="logout()" class="text-sm text-blue-400 hover:underline hidden">Đăng xuất</button>
+      <div class="flex items-center space-x-4">
+        <div id="user-greeting" class="hidden flex items-center space-x-2">
+          <img id="user-avatar" src="https://via.placeholder.com/32" alt="Avatar" class="w-8 h-8 rounded-full">
+          <span id="user-name-display" class="text-sm text-gray-200"></span>
+        </div>
+        <div id="auth-section" class="flex items-center space-x-2">
+          <button id="auth-button" onclick="showAuthModal(false)" class="text-sm text-blue-400 hover:underline">Đăng nhập</button>
+          <button id="logout-button" onclick="logout()" class="text-sm text-blue-400 hover:underline hidden">Đăng xuất</button>
+          <div id="menu-section" class="relative hidden">
+            <button id="menu-toggle" class="text-gray-400 hover:text-gray-200 focus:outline-none">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+            <div id="menu-dropdown" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 hidden z-50">
+              <a href="account.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Thông tin tài khoản</a>
+              <a href="#" onclick="showUpgradeAccount()" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Nâng cấp tài khoản</a>
+              <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Đăng xuất</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
+      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md relative">
+        <button type="button" onclick="hideAuthModal()" class="absolute top-2 right-2 text-red-500 hover:text-red-300 text-2xl font-bold">×</button>
         <h3 id="auth-title" class="text-lg font-semibold text-center text-blue-400 mb-4">Đăng nhập</h3>
         <form id="auth-form" class="space-y-4" onsubmit="handleAuth(event)">
           <div>
@@ -29,11 +48,85 @@
           </div>
           <div>
             <label class="block text-sm text-gray-400">Mật khẩu</label>
-            <input id="password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            <div class="relative">
+              <input id="password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" required>
+              <button type="button" id="toggle-password" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200" onclick="togglePasswordVisibility('password')">👁️</button>
+            </div>
           </div>
           <button type="submit" id="auth-submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Đăng nhập</button>
-          <p id="auth-toggle" onclick="showAuthModal(document.getElementById('auth-title').textContent === 'Đăng nhập')" class="text-center text-sm text-blue-400 cursor-pointer hover:underline">Chưa có tài khoản? Đăng ký</p>
+          <p id="auth-toggle" onclick="showAuthModal(true)" class="text-center text-sm text-blue-400 cursor-pointer hover:underline">Chưa có tài khoản? Đăng ký</p>
         </form>
+      </div>
+    </div>
+
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md relative">
+        <button type="button" onclick="hideRegisterModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200 text-xl">×</button>
+        <h3 id="register-title" class="text-lg font-semibold text-center text-blue-400 mb-4">Đăng ký</h3>
+        <form id="register-form" class="space-y-4" onsubmit="handleRegister(event)">
+          <div>
+            <label class="block text-sm text-gray-400">Tên đăng nhập</label>
+            <input id="register-username" type="text" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400">Tên người dùng</label>
+            <input id="user-name" type="text" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400">Email</label>
+            <input id="register-email" type="email" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400">Mã giới thiệu (không bắt buộc)</label>
+            <input id="referral-code" type="text" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400">Mật khẩu</label>
+            <div class="relative">
+              <input id="register-password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" required>
+              <button type="button" id="toggle-register-password" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200" onclick="togglePasswordVisibility('register-password')">👁️</button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400">Xác nhận mật khẩu</label>
+            <div class="relative">
+              <input id="confirm-password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" required>
+              <button type="button" id="toggle-confirm-password" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200" onclick="togglePasswordVisibility('confirm-password')">👁️</button>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="terms" class="mr-2" required>
+            <label class="text-sm text-gray-400">Tôi đồng ý với <a href="#" onclick="showTermsModal()" class="text-blue-400 hover:underline">Điều khoản sử dụng</a></label>
+          </div>
+          <button type="submit" id="register-submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Đăng ký</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md relative">
+        <button type="button" onclick="hideTermsModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200 text-xl">×</button>
+        <h3 class="text-lg font-semibold text-center text-blue-400 mb-4">Điều khoản từ chối trách nhiệm</h3>
+        <div class="max-h-96 overflow-y-auto text-sm text-gray-300">
+          <p class="mb-4">Trang web này cung cấp thông tin dự đoán giá tiền điện tử dựa trên dữ liệu lịch sử và các mô hình dự đoán. Tuy nhiên, chúng tôi không đảm bảo tính chính xác, đầy đủ hoặc kịp thời của các dự đoán này. Các thông tin được cung cấp chỉ mang tính chất tham khảo và không được coi là lời khuyên đầu tư.</p>
+          <p class="mb-4">Thị trường tiền điện tử có tính biến động cao và tiềm ẩn nhiều rủi ro. Người dùng nên tự nghiên cứu, đánh giá và chịu trách nhiệm hoàn toàn đối với các quyết định đầu tư của mình. Chúng tôi, bao gồm nhà phát triển, nhà cung cấp dữ liệu và các bên liên quan, không chịu trách nhiệm pháp lý đối với bất kỳ tổn thất tài chính, thiệt hại hoặc hậu quả nào phát sinh từ việc sử dụng thông tin trên trang web này.</p>
+          <p class="mb-4">Dữ liệu giá được lấy từ các nguồn bên thứ ba (như Binance, Coinbase, Kraken) và có thể bị sai lệch hoặc không cập nhật kịp thời. Chúng tôi không chịu trách nhiệm đối với các lỗi hoặc gián đoạn trong dữ liệu này.</p>
+          <p class="mb-4"><strong>Cảnh báo về quy định pháp luật Việt Nam:</strong> Theo quy định pháp luật hiện hành tại Việt Nam, tiền điện tử không được công nhận là phương tiện thanh toán hợp pháp. Việc đầu tư, giao dịch hoặc sử dụng tiền điện tử có thể vi phạm pháp luật và chịu rủi ro pháp lý. Người dùng phải tuân thủ các quy định của pháp luật Việt Nam và tự chịu trách nhiệm đối với mọi hành vi liên quan đến tiền điện tử. Chúng tôi không khuyến khích hoặc hỗ trợ bất kỳ hoạt động nào vi phạm pháp luật Việt Nam.</p>
+          <p class="mb-4">Bằng cách sử dụng trang web này, bạn đồng ý rằng bạn đã hiểu và chấp nhận các rủi ro liên quan, đồng thời từ bỏ mọi khiếu nại đối với chúng tôi liên quan đến các tổn thất có thể xảy ra.</p>
+          <p class="mb-4">Nếu bạn không đồng ý với các điều khoản này, vui lòng ngừng sử dụng trang web ngay lập tức.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="upgrade-account-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md relative">
+        <button type="button" onclick="hideUpgradeAccount()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200 text-xl">×</button>
+        <h3 class="text-lg font-semibold text-center text-blue-400 mb-4">Nâng cấp tài khoản</h3>
+        <div class="text-sm text-gray-300">
+          <p class="mb-4">Nâng cấp tài khoản để nhận thêm các tính năng độc quyền, như dự đoán giá chi tiết hơn và lịch sử dữ liệu mở rộng.</p>
+          <p class="mb-4">Vui lòng liên hệ hỗ trợ để biết thêm chi tiết.</p>
+          <button class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Liên hệ hỗ trợ</button>
+        </div>
       </div>
     </div>
 
