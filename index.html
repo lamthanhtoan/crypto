@@ -12,7 +12,10 @@
 <body class="bg-gray-900 text-gray-100 font-inter">
   <div class="max-w-sm sm:max-w-2xl mx-auto p-4 sm:p-6">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl sm:text-2xl font-semibold text-blue-400">Dự đoán giá tiền điện tử</h2>
+      <div class="flex items-center space-x-4">
+        <img src="logo.png" alt="CoinInvestor Logo" class="w-12 h-12">
+        <h2 class="text-xl sm:text-2xl font-semibold text-blue-400">Dự đoán giá tiền điện tử</h2>
+      </div>
       <div class="flex items-center space-x-4">
         <div id="user-greeting" class="hidden flex items-center space-x-2">
           <img id="user-avatar" src="https://via.placeholder.com/32" alt="Avatar" class="w-8 h-8 rounded-full">
@@ -96,7 +99,7 @@
           </div>
           <div class="flex items-center">
             <input type="checkbox" id="terms" class="mr-2" required>
-            <label class="text-sm text-gray-400">Tôi đồng ý với <a href="#" onclick="showTermsModal()" class="text-blue-400 hover:underline">Điều khoản sử dụng</a></label>
+            <label class="text-sm text-gray-400">Tôi đã đọc và đồng ý với <a href="#" onclick="window.open('terms-service.html', '_blank')" class="text-blue-400 hover:underline">Điều khoản dịch vụ</a> và <a href="#" onclick="window.open('privacy-policy.html', '_blank')" class="text-blue-400 hover:underline">Chính sách bảo mật</a></label>
           </div>
           <button type="submit" id="register-submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Đăng ký</button>
         </form>
