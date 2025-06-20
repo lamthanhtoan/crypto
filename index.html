@@ -2,23 +2,78 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Công Cụ Trắc Địa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hỗ Trợ Trắc Địa</title>
   <style>
-    body { font-family: Arial; background: #f4f4f4; max-width: 600px; margin: auto; padding: 20px; }
-    h2 { color: #007bff; }
-    select, input { width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; border: 1px solid #ccc; }
-    button { width: 100%; padding: 12px; margin-top: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    .block { background: #fff; padding: 15px; margin-top: 15px; border-radius: 8px; box-shadow: 0 2px 4px #ccc; }
-    .result { margin-top: 10px; padding: 10px; background: #eef; border-left: 4px solid #007bff; }
-    .note { font-size: 0.9em; color: #555; margin-top: 8px; background: #f9f9f9; padding: 8px; border-left: 3px solid #999; }
+    body {
+      font-family: "Helvetica", "Arial", sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      margin: 0;
+    }
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+    select, input {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      margin-top: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .block {
+      background: #fff;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .result {
+      margin-top: 15px;
+      padding: 15px;
+      font-size: 18px;
+      background: #e6f0ff;
+      border-left: 5px solid #007bff;
+      border-radius: 6px;
+    }
+    .note {
+      font-size: 16px;
+      color: #444;
+      margin-top: 12px;
+      background: #f9f9f9;
+      padding: 12px;
+      border-left: 4px solid #999;
+      border-radius: 6px;
+    }
+    label {
+      margin-top: 12px;
+      display: block;
+      font-size: 17px;
+    }
   </style>
 </head>
 <body>
 
   <h2>Công Cụ Hỗ Trợ Tính Trắc Địa</h2>
 
-  <label>Chọn chức năng:</label>
+  <label>🔽 Chọn chức năng:</label>
   <select id="chucnang" onchange="chonChucNang()">
     <option value="">-- Chọn --</option>
     <option value="2c">Tính 2C</option>
@@ -26,8 +81,9 @@
     <option value="ss">Tính sai số vị trí</option>
   </select>
 
+  <!-- Form 2C -->
   <div id="form2c" class="block" style="display:none;">
-    <h3>1️⃣ Tính 2C</h3>
+    <h3>🔹 Tính 2C</h3>
     <label>Góc 1 (DMS):</label>
     <input id="g1d" placeholder="Độ">
     <input id="g1m" placeholder="Phút">
@@ -36,13 +92,14 @@
     <input id="g2d" placeholder="Độ">
     <input id="g2m" placeholder="Phút">
     <input id="g2s" placeholder="Giây">
-    <button onclick="tinh2C()">Tính 2C</button>
+    <button onclick="tinh2C()">✅ Tính 2C</button>
     <div id="kq2c" class="result"></div>
-    <div class="note"><b>Công thức:</b> 2C = [A1 + (A2 - 180°)] / 2</div>
+    <div class="note"><b>Công thức:</b> 2C = [A1 + (A2 − 180°)] / 2</div>
   </div>
 
+  <!-- Form khoảng cách -->
   <div id="formkc" class="block" style="display:none;">
-    <h3>2️⃣ Tính khoảng cách 2 điểm</h3>
+    <h3>🔹 Tính khoảng cách 2 điểm</h3>
     <label>X1:</label>
     <input id="x1">
     <label>Y1:</label>
@@ -51,18 +108,19 @@
     <input id="x2">
     <label>Y2:</label>
     <input id="y2">
-    <button onclick="tinhKC()">Tính khoảng cách</button>
+    <button onclick="tinhKC()">✅ Tính khoảng cách</button>
     <div id="kqkc" class="result"></div>
     <div class="note"><b>Công thức:</b> S = √[(X2 − X1)² + (Y2 − Y1)²]</div>
   </div>
 
+  <!-- Form sai số vị trí -->
   <div id="formss" class="block" style="display:none;">
-    <h3>3️⃣ Tính sai số vị trí</h3>
+    <h3>🔹 Tính sai số vị trí</h3>
     <label>∆X:</label>
     <input id="dx">
     <label>∆Y:</label>
     <input id="dy">
-    <button onclick="tinhSaiSo()">Tính sai số vị trí</button>
+    <button onclick="tinhSaiSo()">✅ Tính sai số vị trí</button>
     <div id="kqss" class="result"></div>
     <div class="note"><b>Công thức:</b> m = √[(∆X)² + (∆Y)²]</div>
   </div>
