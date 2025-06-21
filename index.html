@@ -167,7 +167,7 @@
     <button onclick="tinh2C()">✅ Tính 2C</button>
     <div id="kq2c" class="result"></div>
     <div id="error2c" class="error" style="display: none;"></div>
-    <div class="note"><b>Công thức:</b> 2C = [A1 + (A2 − 180°)] / 2</div>
+    <div class="note"><b>Công thức:</b> 2C = [A1 + (A2 − 360°)] / 2</div>
   </div>
 
   <!-- TÍNH KHOẢNG CÁCH 2 ĐIỂM -->
@@ -249,7 +249,7 @@
     <div class="note"><b>Công thức:</b> m = √[(∆X)² + (∆Y)²]</div>
   </div>
 
-  <p class="footer">Tác giả: Lâm Thanh Toàn</p>
+  <p class="footer">Tác giả: Lâm Thanh Toàn - Cập nhật: 21/06/2025</p>
 
   <script>
     const forms = {
@@ -303,7 +303,7 @@
       const [g1d, g1m, g1s, g2d, g2m, g2s] = inputs.map(parseFloat);
       const g1 = dmsToDecimal(g1d, g1m, g1s);
       const g2 = dmsToDecimal(g2d, g2m, g2s);
-      const resultDec = (g1 + (g2 - 180)) / 2;
+      const resultDec = (g1 + (g2 - 360)) / 2; // Cập nhật công thức
       document.getElementById('kq2c').textContent = `Kết quả 2C: ${decimalToDMS(resultDec)}`;
     }
 
