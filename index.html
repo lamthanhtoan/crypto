@@ -167,7 +167,7 @@
     <button onclick="tinh2C()">✅ Tính 2C</button>
     <div id="kq2c" class="result"></div>
     <div id="error2c" class="error" style="display: none;"></div>
-    <div class="note"><b>Công thức:</b> 2C = [A1 + (A2 − 360°)] / 2</div>
+    <div class="note"><b>Công thức:</b> 2C = |A1 + A2 − 360°|</div>
   </div>
 
   <!-- TÍNH KHOẢNG CÁCH 2 ĐIỂM -->
@@ -293,7 +293,7 @@
 
     function tinh2C() {
       clearResultAndError('kq2c', 'error2c');
-      const inputs = ['g1d', 'g1m', 'g1s', 'g2d', 'g2m', 'g2s'].map(id => 
+      const inputs = ['g1d', 'g1m', 'g1s', 'g2d', 'g2m', 'g2s'].map(id =>
         document.getElementById(id).value
       );
       if (!inputs.every(isValidNumber)) {
@@ -303,7 +303,7 @@
       const [g1d, g1m, g1s, g2d, g2m, g2s] = inputs.map(parseFloat);
       const g1 = dmsToDecimal(g1d, g1m, g1s);
       const g2 = dmsToDecimal(g2d, g2m, g2s);
-      const resultDec = (g1 + (g2 - 360)) / 2; // Cập nhật công thức
+      const resultDec = Math.abs(g1 + g2 - 360); // ✅ Theo TCVN
       document.getElementById('kq2c').textContent = `Kết quả 2C: ${decimalToDMS(resultDec)}`;
     }
 
@@ -332,8 +332,8 @@
       const BCx = cx - bx;
       const BCy = cy - by;
       const dot = BAx * BCx + BAy * BCy;
-      const magBA = Math.sqrt(BAx**2 + BAy**2);
-      const magBC = Math.sqrt(BCx**2 + BCy**2);
+      const magBA = Math.sqrt(BAx ** 2 + BAy ** 2);
+      const magBC = Math.sqrt(BCx ** 2 + BCy ** 2);
       let cosTheta = dot / (magBA * magBC);
       cosTheta = Math.max(-1, Math.min(1, cosTheta));
       const theta = Math.acos(cosTheta) * 180 / Math.PI;
