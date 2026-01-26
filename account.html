@@ -1,282 +1,150 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thông tin tài khoản</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .copy-icon {
-      font-size: 1.25rem; /* Điều chỉnh kích thước icon */
-      line-height: 1;
-    }
-  </style>
-</head>
-<body class="bg-gray-900 text-gray-100 font-inter min-h-screen">
-  <div class="absolute top-4 left-4">
-    <a href="index.html" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">Trang Chủ</a>
-  </div>
-  <div class="max-w-md mx-auto p-4 sm:p-6 pt-16"> <!-- Thêm padding-top để tránh chồng lấp nút Trang Chủ -->
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-semibold text-blue-400 mb-4">Thông tin tài khoản</h2>
-      <div class="mb-6">
-        <img id="account-avatar" src="https://via.placeholder.com/128" alt="Avatar" class="w-32 h-32 rounded-full mx-auto mb-4">
-        <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="updateAvatar(event)">
-        <button id="change-avatar-btn" onclick="document.getElementById('avatar-upload').click()" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">Thay đổi Avatar</button>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label class="block text-sm text-gray-400">Tên đăng nhập</label>
-        <p id="account-username" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2"></p>
-      </div>
-      <div>
-        <label class="block text-sm text-gray-400">Tên người dùng</label>
-        <p id="account-fullname" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2"></p>
-      </div>
-      <div>
-        <label class="block text-sm text-gray-400">Email</label>
-        <p id="account-email" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2"></p>
-      </div>
-      <div>
-        <label class="block text-sm text-gray-400">Mã giới thiệu</label>
-        <div class="flex items-center">
-          <p id="account-referral" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2"></p>
-          <button onclick="copyReferralCode()" class="ml-2 bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 transition"><span class="copy-icon">📋</span></button>
-        </div>
-        <div class="flex items-center mt-1">
-          <p class="text-gray-500 text-base">Lượt giới thiệu: <span id="referral-count">0</span></p>
-          <button onclick="showReferralStatsModal()" class="ml-2 text-blue-400 text-base hover:text-blue-300">Xem thêm</button>
-        </div>
-      </div>
-      <div>
-        <label class="block text-sm text-gray-400">Mật khẩu</label>
-        <div class="flex items-center">
-          <p id="account-password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2">*****</p>
-        </div>
-        <div class="mt-1">
-          <button onclick="showChangePasswordModal()" class="text-blue-400 text-base hover:text-blue-300">Thay đổi mật khẩu</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal đổi mật khẩu -->
-    <div id="change-password-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center">
-      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
-        <h3 class="text-lg font-semibold text-blue-400 mb-4">Đổi mật khẩu</h3>
-        <form id="change-password-form" onsubmit="changePassword(event)" class="space-y-4">
-          <div>
-            <label class="block text-sm text-gray-400">Mật khẩu hiện tại</label>
-            <input id="current-password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div>
-            <label class="block text-sm text-gray-400">Mật khẩu mới</label>
-            <input id="new-password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" required>
-            <button type="button" id="toggle-new-password" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200" onclick="togglePasswordVisibility('new-password')">👁️</button>
-          </div>
-          <div>
-            <label class="block text-sm text-gray-400">Xác nhận mật khẩu mới</label>
-            <input id="confirm-new-password" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" required>
-            <button type="button" id="toggle-confirm-new-password" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200" onclick="togglePasswordVisibility('confirm-new-password')">👁️</button>
-          </div>
-          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Lưu thay đổi</button>
-          <button type="button" onclick="hideChangePasswordModal()" class="w-full mt-2 bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition">Hủy</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Modal xem lượt giới thiệu -->
-    <div id="referral-stats-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center">
-      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
-        <h3 class="text-lg font-semibold text-blue-400 mb-4">Lượt giới thiệu</h3>
-        <p>Tổng số lượt: <span id="referral-total-count">0</span></p>
-        <ul id="referral-list" class="mt-4 space-y-2 text-sm"></ul>
-        <button type="button" onclick="hideReferralStatsModal()" class="w-full mt-4 bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition">Đóng</button>
-      </div>
-    </div>
-
-    <!-- Modal đổi mã giới thiệu -->
-    <div id="change-referral-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center">
-      <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md">
-        <h3 class="text-lg font-semibold text-blue-400 mb-4">Đổi mã giới thiệu</h3>
-        <form id="change-referral-form" onsubmit="changeReferralCode(event)" class="space-y-4">
-          <div>
-            <label class="block text-sm text-gray-400">Mật khẩu hiện tại</label>
-            <input id="current-password-referral" type="password" class="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Tạo mã mới</button>
-          <button type="button" onclick="hideChangeReferralModal()" class="w-full mt-2 bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition">Hủy</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <script>
-    function loadAccountInfo() {
-      const username = localStorage.getItem('currentUser');
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      const user = users[username];
-      if (user) {
-        document.getElementById('account-username').textContent = username || '12';
-        document.getElementById('account-fullname').textContent = user.fullName || 'Nguyen Van B';
-        document.getElementById('account-email').textContent = user.email || 'nguyenvanb@example.com';
-        document.getElementById('account-referral').textContent = user.ownReferralCode || 'ABC12345';
-        document.getElementById('account-password').textContent = '*****';
-        document.getElementById('account-avatar').src = user.avatar || 'https://via.placeholder.com/128';
-        updateReferralStats();
-      } else if (!username) {
-        window.location.href = 'index.html';
-      }
-    }
-
-    function updateAvatar(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const username = localStorage.getItem('currentUser');
-          const users = JSON.parse(localStorage.getItem('users') || '{}');
-          if (users[username]) {
-            users[username].avatar = e.target.result;
-            localStorage.setItem('users', JSON.stringify(users));
-            document.getElementById('account-avatar').src = e.target.result;
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function togglePasswordVisibility(inputId) {
-      const passwordInput = document.getElementById(inputId);
-      const toggleButton = document.getElementById(`toggle-${inputId}`);
-      if (passwordInput && toggleButton) {
-        const type = passwordInput.type === 'password' ? 'text' : 'password';
-        passwordInput.type = type;
-        toggleButton.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
-      }
-    }
-
-    function showChangePasswordModal() {
-      document.getElementById('change-password-modal').classList.remove('hidden');
-    }
-
-    function hideChangePasswordModal() {
-      document.getElementById('change-password-modal').classList.add('hidden');
-      document.getElementById('change-password-form').reset();
-    }
-
-    function showChangeReferralModal() {
-      document.getElementById('change-referral-modal').classList.remove('hidden');
-    }
-
-    function hideChangeReferralModal() {
-      document.getElementById('change-referral-modal').classList.add('hidden');
-      document.getElementById('change-referral-form').reset();
-    }
-
-    function showReferralStatsModal() {
-      document.getElementById('referral-stats-modal').classList.remove('hidden');
-      updateReferralStats();
-    }
-
-    function hideReferralStatsModal() {
-      document.getElementById('referral-stats-modal').classList.add('hidden');
-    }
-
-    function changePassword(event) {
-      event.preventDefault();
-      const currentPassword = document.getElementById('current-password').value.trim();
-      const newPassword = document.getElementById('new-password').value.trim();
-      const confirmNewPassword = document.getElementById('confirm-new-password').value.trim();
-
-      if (!currentPassword || !newPassword || !confirmNewPassword) {
-        alert('Vui lòng điền đầy đủ thông tin!');
-        return;
-      }
-      if (newPassword !== confirmNewPassword) {
-        alert('Mật khẩu xác nhận không khớp!');
-        return;
-      }
-
-      const username = localStorage.getItem('currentUser');
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[username] && users[username].password === currentPassword) {
-        users[username].password = newPassword;
-        localStorage.setItem('users', JSON.stringify(users));
-        hideChangePasswordModal();
-        alert('Đổi mật khẩu thành công!');
-      } else {
-        alert('Mật khẩu hiện tại không đúng!');
-      }
-    }
-
-    function changeReferralCode(event) {
-      event.preventDefault();
-      const currentPassword = document.getElementById('current-password-referral').value.trim();
-
-      if (!currentPassword) {
-        alert('Vui lòng nhập mật khẩu hiện tại!');
-        return;
-      }
-
-      const username = localStorage.getItem('currentUser');
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[username] && users[username].password === currentPassword) {
-        const newReferralCode = generateReferralCode();
-        users[username].ownReferralCode = newReferralCode;
-        localStorage.setItem('users', JSON.stringify(users));
-        document.getElementById('account-referral').textContent = newReferralCode;
-        hideChangeReferralModal();
-        alert(`Đã tạo mã giới thiệu mới: ${newReferralCode}`);
-      } else {
-        alert('Mật khẩu hiện tại không đúng!');
-      }
-    }
-
-    function generateReferralCode() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let code = '';
-      for (let i = 0; i < 8; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return code;
-    }
-
-    function copyReferralCode() {
-      const referralCode = document.getElementById('account-referral').textContent;
-      if (referralCode && referralCode !== '*****') {
-        navigator.clipboard.writeText(referralCode).then(() => {
-          alert('Đã sao chép mã giới thiệu!');
-        }).catch(err => {
-          alert('Không thể sao chép mã giới thiệu!');
-          console.error('Lỗi sao chép:', err);
-        });
-      }
-    }
-
-    function updateReferralStats() {
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      const currentUser = localStorage.getItem('currentUser');
-      let count = 0;
-      const referrals = [];
-
-      for (let user in users) {
-        if (users[user].referralCode && users[user].referralCode === users[currentUser]?.ownReferralCode) {
-          count++;
-          referrals.push({
-            username: user,
-            created: users[user].created || new Date().toLocaleString('vi-VN')
-          });
+    <meta charset="UTF-8">
+    <title>Lịch sử giao dịch - TPBank</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f0fb;
         }
-      }
 
-      document.getElementById('referral-count').textContent = count;
-      document.getElementById('referral-total-count').textContent = count;
-      const referralList = document.getElementById('referral-list');
-      referralList.innerHTML = referrals.map(ref => `<li>${ref.username} - Đã tạo: ${ref.created}</li>`).join('');
-    }
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #5a2ea6, #7b3fe4);
+            color: white;
+            padding: 22px;
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-    document.addEventListener('DOMContentLoaded', loadAccountInfo);
-  </script>
+        .sub {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 12px 25px rgba(90,46,166,0.2);
+            max-width: 420px;
+            margin: auto;
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            color: #5a2ea6;
+        }
+
+        .info {
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        /* Nút */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #7b3fe4, #5a2ea6);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(123,63,228,0.45);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            text-align: center;
+            animation: pop 0.25s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+        }
+
+        /* CHỮ ĐỎ – TO – NHẤP NHÁY */
+        .alert-text {
+            font-size: 60px;
+            font-weight: 900;
+            color: red;
+            animation: blink 0.6s infinite, zoom 1.2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes zoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes pop {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        TPBank
+        <div class="sub">Ngân hàng Tiên Phong</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Lịch sử giao dịch</h2>
+            <div class="info">
+                Chủ tài khoản: <b>Lâm Thanh Toàn</b>
+            </div>
+
+            <button class="btn" onclick="openModal()">XEM GIAO DỊCH</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal" onclick="closeModal()">
+        <div class="modal-content">
+            <div class="alert-text">
+                Đụ mẹ mầy,Bố Mầy đẻ được mầy
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+    </script>
+
 </body>
 </html>
